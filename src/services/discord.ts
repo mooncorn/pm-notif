@@ -31,7 +31,12 @@ export async function sendNotification(
   lines.push(`${action} ${formatNumber(trade.shares)} ${trade.outcome.toUpperCase()} @ ${formatCents(trade.price)} = $${formatNumber(trade.amount)}${percentSoldStr}`);
   lines.push('');
 
-  // Position lines - show all positions in this event
+  // Check if this SELL closed the position (position no longer exists in API)
+  if (trade.side === 'SELL' && !tradedPosition) {
+    lines.push(`📍 ${trade.market}\n${trade.outcome.toUpperCase()}: CLOSED`);
+  }
+
+  // Position lines - show remaining positions in this event
   if (trade.positions && trade.positions.length > 0) {
     for (const pos of trade.positions) {
       if (pos.size < 0.01) {
