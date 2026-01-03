@@ -26,7 +26,9 @@ export async function sendNotification(
 
   // Trade line
   const sideIcon = trade.side === 'BUY' ? '🟢' : '🔴';
-  lines.push(`\t${formatNumber(trade.shares)} ${trade.outcome.toUpperCase()} @ ${formatCents(trade.price)} = $${formatNumber(trade.amount)}${percentSoldStr}`);
+  const action = trade.side === 'BUY' ? 'Bought' : 'Sold'
+  
+  lines.push(`${action} ${formatNumber(trade.shares)} ${trade.outcome.toUpperCase()} @ ${formatCents(trade.price)} = $${formatNumber(trade.amount)}${percentSoldStr}`);
   lines.push('');
 
   // Position lines - show all positions in this event
@@ -36,13 +38,12 @@ export async function sendNotification(
         lines.push(`📍 ${pos.title}\n${pos.outcome.toUpperCase()}: CLOSED`);
       } else {
         const pnlStr = calculatePositionPnL(pos);
-        lines.push(`📍 ${pos.title}\n\t${pos.outcome.toUpperCase()}: ${formatNumber(pos.size)} @ ${formatCents(pos.avgPrice)} ($${formatNumber(pos.currentValue)})${pnlStr}`);
+        lines.push(`📍 ${pos.title}\n${pos.outcome.toUpperCase()}: ${formatNumber(pos.size)} @ ${formatCents(pos.avgPrice)} ($${formatNumber(pos.currentValue)})${pnlStr}`);
       }
     }
   }
 
   const color = COLORS[trade.side];
-
   const title = `${sideIcon} ${trade.market}`
 
   const embed = {
@@ -83,7 +84,7 @@ function calculatePositionPnL(position: { size: number; avgPrice: number; curren
   }
 
   const pnlPercent = (pnl / initialValue) * 100;
-  return ` ${arrow} ${sign}$${formatNumber(Math.abs(pnl))} (${sign}${pnlPercent.toFixed(1)}%)`;
+  return ` ${arrow} ${sign}$${formatNumber(Math.abs(pnl))} (${sign}${Math.abs(pnlPercent).toFixed(1)}%)`;
 }
 
 function formatNumber(num: number): string {
