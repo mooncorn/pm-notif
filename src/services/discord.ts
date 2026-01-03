@@ -97,6 +97,8 @@ function formatNumber(num: number): string {
 }
 
 function formatCents(price: number): string {
-  const cents = Math.round(price * 100);
-  return `${cents}¢`;
+  const cents = price * 100;
+  // Show one decimal if fractional, otherwise whole number
+  const formatted = Number.isInteger(cents) ? cents.toString() : cents.toFixed(1);
+  return `${formatted}¢`;
 }
