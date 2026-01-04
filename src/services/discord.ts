@@ -49,7 +49,7 @@ export async function sendNotification(
   }
 
   const color = COLORS[trade.side];
-  const title = `${sideIcon} ${trade.market}`
+  const title = `${sideIcon} ${trade.outcome.toUpperCase()}: ${trade.market}`
 
   const embed = {
     author: {
