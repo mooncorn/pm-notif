@@ -15,7 +15,7 @@ function loadTraders(): Trader[] {
   const tradersPath = path.join(process.cwd(), 'config', 'traders.json');
 
   if (!fs.existsSync(tradersPath)) {
-    throw new Error(`Traders config not found at ${tradersPath}`);
+    throw new Error(`Traders config not found at ${tradersPath}. Copy config/traders.json.example to config/traders.json and add your traders.`);
   }
 
   const content = fs.readFileSync(tradersPath, 'utf-8');
