@@ -26,9 +26,9 @@ export async function sendNotification(
 
   // Trade line
   const sideIcon = trade.side === 'BUY' ? '🟢' : '🔴';
-  const action = trade.side === 'BUY' ? 'Bought' : 'Sold'
+  const action = trade.side === 'BUY' ? 'bought' : 'sold'
   
-  lines.push(`${action} ${formatNumber(trade.shares)} ${trade.outcome.toUpperCase()} @ ${formatCents(trade.price)} = $${formatNumber(trade.amount)}${percentSoldStr}`);
+  lines.push(`${truncateName(trade.traderName)} ${action} ${formatNumber(trade.shares)} ${trade.outcome.toUpperCase()} @ ${formatCents(trade.price)} = $${formatNumber(trade.amount)}${percentSoldStr}`);
   lines.push('');
 
   // Check if this SELL closed the position (position no longer exists in API)
@@ -101,4 +101,9 @@ function formatCents(price: number): string {
   // Show one decimal if fractional, otherwise whole number
   const formatted = Number.isInteger(cents) ? cents.toString() : cents.toFixed(1);
   return `${formatted}¢`;
+}
+
+function truncateName(name: string, maxLength: number = 12): string {
+  if (name.length <= maxLength) return name;
+  return name.slice(0, maxLength) + '...';
 }
